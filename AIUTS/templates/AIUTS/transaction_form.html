@@ -1,0 +1,32 @@
+{% extends "AIUTS/template.html" %}
+{% block heading %}Making Transaction {% endblock heading %}
+
+
+{% block content %} 
+{% for message in messages %}
+<div role="alert" class="msg">
+ <p>{{ message }}</p> 
+</div>
+{% endfor %}
+<div class="form">
+    <form method="POST" action="{% url 'AIUTS:addTransaction' %}" >
+    {% csrf_token %}
+    {{ form.as_p}} 
+    <!-- <label for="transactionSender">From:</label>
+    <input  type="text" name="transactionSender" ><br>
+
+    <label for="transactionReceiver">To: </label>
+    <input  type="text" name="transactionReceiver" ><br>
+
+    <label for="transactionMessage">Message: </label>
+    <input type="text" name="transactionMessage" placeholder="short note"><br>
+
+    <label for="transactionAmount">Amount: </label>
+    <input type="number" name="transactionAmount" placeholder="0"><br>-->
+
+    <input type="submit" value="Make Transaction"> 
+    </form>
+</div>
+{% endblock content %}
+
+

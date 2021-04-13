@@ -1,0 +1,224 @@
+<html>
+
+<head>
+  {% load static %}
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/login.css' %}">
+  <title>Sign in</title>
+</head>
+
+<body>
+<div class="main">
+    <p class="sign">AIUTS | Sign Up</p>
+    <form class="form1" method="POST" action="{% url 'AIUTS:addAccount' %}">
+
+      {% csrf_token %}
+
+    <label class="Lform" for="username">Username</label>
+      <input class="un " type="text" placeholder="Username" name="username">
+      <label class="Lform" for="password">Password</label>
+      <input class="pass" type="password"  placeholder="password" name="password1">
+      <label class="Lform" for="password">Confirm Password</label>
+      <input class="pass" type="password"  placeholder="password" name="password2"> 
+
+
+      <!-- <label class="Lform" for="accountAmount">Starting Amount</label>
+      <input class="pass" type="number" placeholder="default amount is 100" value="100" name="accountAmount"> -->
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+        <ul class="errorlist"> 
+          <li class="formError">{{ error|escape }}</li> 
+        </ul>
+          
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+    
+     <input class="submit" type="submit" value="Sign Up" />
+    
+      <p class="forgot" >Already have an account? <a class="createA"href="{% url 'login' %}">Sign In</p>
+
+    </form>          
+  </div>  
+<!--  <div class="main">
+    <form method="POST" action="{% url 'AIUTS:addAccount' %}" >
+        {% csrf_token %}
+    {{ form.as_p}} 
+
+
+
+    {% if form.errors %}
+      {% for field in form %}
+
+           {% for error in field.errors %}
+                {{field.label}}: {{ error|escape }}
+           {% endfor %}
+
+      {% endfor %}
+{% endif %}
+
+        <input type="submit" value="Create New Account">
+    </form>  -->
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--  
+{% block heading %}Creating Account{% endblock heading %}
+
+{% block content %} 
+<div class="form">
+    <form method="POST" action="{% url 'AIUTS:addAccount' %}" >
+        {% csrf_token %}
+    {{ form.as_p}} 
+        <input type="submit" value="Create New Account">
+    </form>
+</div>
+
+{% endblock content %}  
+ -->
+
+
+
+
+
+
+
+  
+
+
+<!-- <h1>Welcome to AIUTS</h1>
+
+<form method="post" action="{% url 'login' %}" class="loginForm">
+{% csrf_token %}
+
+  <label for="username">Username: </label>
+  <input type="text" name="username"> <br>
+
+  <label for="password">Password: </label>
+  <input type="password" name="password"><br>
+
+  <input type="submit" value="login" />
+  <input type="hidden" name="next" value="{{ next }}" />
+</form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<html>
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/login.css' %}">
+  <title>Sign Up</title>
+</head>
+
+<body>
+
+ 
+
+  <div class="main">
+    <p class="sign">AIUTS | Sign up</p>
+    <form class="form1" method="post" action="{% url 'AIUTS:addAccount' %}">
+      {% csrf_token %}
+      <input class="un " type="text" placeholder="Username" name="username">
+      <input class="un " type="text" placeholder="Username" name="password">
+      <input class="un " type="num" placeholder="Username" name="accountAmount">
+
+     <input class="submit" type="submit" value="Create Account" />
+    
+      <p class="forgot" >Already have an account? <a class="createA"href="{% url 'login' %}">Login</p>
+
+    </form>          
+  </div>  
+</body>
+</html>
+
+ -->

@@ -1,0 +1,33 @@
+{% extends "AIUTS/template.html" %}
+
+
+
+{% block heading %}
+
+
+{% if users %}
+    {% for user in users %}
+        <p>Balance: {{user.accountAmount}} Baht</p>
+    {% endfor %}
+    {% else %}
+    <p> No Account are available. </p>
+    {% endif %}
+{% endblock heading %}
+
+{% block content %} 
+
+    <p>Logged in user:  {{ user }}</p>
+    {% if users %}
+   
+        <hr />
+    
+            {% for user in users %}
+            
+          
+                <li><a href="#">{{ user.accountId }}  balance: {{user.accountAmount}}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p> No Account are available. </p>
+    {% endif %}
+{% endblock content %}

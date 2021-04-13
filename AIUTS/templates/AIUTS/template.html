@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/styles.css' %}">
+    <title>AIUTS</title>
+</head>
+<body>
+    <p class="logout">{{user}} &nbsp;|&nbsp; <a class="logoutbtn" href="{% url 'logout'%}">Logout</a></p>
+    <header>
+            <h1 class="logo"><a class="logo-name"href="{% url 'AIUTS:index' %}" >AIUTS</a></h1>
+            <h2 class="section-name">{% block heading %}{% endblock heading %}</h2>
+            <nav>
+                <ul>
+                    <li><a href="">Account Balance </a></li><br>
+                    <li><a href="{% url 'AIUTS:transactionList' %}" >Transaction Summary</a></li><br>
+                    <li><a href="{% url 'AIUTS:addTransaction' %}"> Make a Transaction</a></li>
+                </ul>
+            </nav>
+      
+    </header>
+    
+    <div id="main">
+        {% block content %} 
+
+        {% if messages %}
+      
+            {% for message in messages %}
+                <div >
+                    {{ message}}
+                </div>
+
+            {% endfor %}
+    {% endif %}
+        {% endblock content %}  
+    </div>
+    <footer>Created by group 4 | April 6, 2021</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

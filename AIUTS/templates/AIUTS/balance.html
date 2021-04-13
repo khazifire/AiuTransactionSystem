@@ -1,0 +1,9 @@
+
+
+
+{% block content %} 
+{% if useraccount %}
+<p>logen in user: {{useraccount.self.request.user}}</p>
+<p>account balance: {{useraccount.accountAmount}}</p>
+    
+{% endblock content %}

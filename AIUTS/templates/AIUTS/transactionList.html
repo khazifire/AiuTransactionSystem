@@ -1,0 +1,51 @@
+{% extends "AIUTS/template.html" %}
+{% block heading %}Transaction History{% endblock heading %}
+{% block content %} 
+
+<fieldset>
+    <legend>Filter Transaction History:</legend>
+    <form  method="POST">
+        {% csrf_token %}
+        <label>From:</label>
+        <input type="date"  name="from_date"><br><br>
+        <label for="lname">To:</label>
+        <input type="date"  name="to_date"><br><br>
+        <input type="submit" value="Filter">
+    </form>
+  </fieldset>
+
+<table class="table table-sm">
+    <tr>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Amount</th>
+        <th>Note</th>
+        <th>Date</th>
+    </tr>
+    {% for transaction in transactions %}
+        <tr>
+            <td>
+                {% if transaction.transactionSender.user.username == request.user.username %} 
+                You   
+                {% else %}
+                {{ transaction.transactionSender.user.username }}
+                {% endif %}
+            </td>
+            <td>
+                {% if transaction.transactionSender.user.username == request.user.username %} 
+                You   
+                {% else %}
+                {{ transaction.transactionReceiver.user.username }}
+                {% endif %}
+            </td>
+            <td>{{ transaction.transactionAmount }}</td>
+            <td>{{ transaction.transactionMessage }}</td>
+            <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <p>No transactions</p>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}
