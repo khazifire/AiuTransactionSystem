@@ -11,23 +11,16 @@ class UserAccount(models.Model):
   
 
 class UserTransaction(models.Model):
-    transactionTime = models.DateTimeField(auto_now_add=True, primary_key=True)
+    transactionId = models.AutoField(primary_key=True)
+    transactionTime = models.DateTimeField(auto_now_add=True)
     transactionSender = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name="Sender")
     transactionReceiver = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name="Receiver")
     transactionAmount = models.IntegerField(default=0)
     transactionMessage = models.CharField(max_length=100, null=True)
+    transactionStatus =  models.CharField(choices=[('Completed', 'C'), ('Uncompleted', 'U')], default='Completed', max_length=20)
+    transactionType = models.CharField(choices=[('Deposit', 'TU'), ('Request', 'R'), ('Transfer', 'T')], default='Transfer', max_length=20)
+    
     def __str__ (self):
         return "{}".format(self.transactionTime)
         
-    def save(self,*args,**kwargs):
-        if self.transactionAmount >self.transactionSender.accountAmount:
-            return False
-        elif self.transactionReceiver ==self.transactionSender:
-            return False
-        else:
-            self.transactionSender.accountAmount -=self.transactionAmount
-            self.transactionSender.save()
-            self.transactionReceiver.accountAmount +=self.transactionAmount
-            self.transactionReceiver.save()
-            super(UserTransaction,self).save(*args,**kwargs)
-
+   

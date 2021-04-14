@@ -20,12 +20,9 @@ class CreateAccountView(generic.CreateView):
     def form_valid(self, form):
         self.instance =form.save(commit=False)
         username = form.cleaned_data['username']
-        # accountAmount = form.cleaned_data['accountAmount']
         accountId= hashlib.md5(str.encode(username)).hexdigest()
-
         user = User.objects.create_user(username=username,password=form.cleaned_data['password1'])
         user.save()
-
         acct = UserAccount(user=user, accountId =accountId, accountAmount=100 )
         acct.save()
 
@@ -33,26 +30,30 @@ class CreateAccountView(generic.CreateView):
 
 class CreateTransactionView(LoginRequiredMixin,generic.CreateView):
     login_url = '/accounts/login/'
-    template_name = 'AIUTS/deposit_form.html.html'    
+    template_name = 'AIUTS/transaction_form.html'    
     form_class = CreateTransaction
     success_url ="/"
     def form_valid(self,form):
         self.instance =form.save(commit=False)
         form.instance.user = self.request.user
         amount = form.cleaned_data['transactionAmount']
-  
-        receiver = form.cleaned_data['transactionReceiver']
+        receiver = self.request.POST.get('transactionReceiver')
         sender =self.request.POST.get('transactionSender')
-        
-        UserAcc = UserAccount.objects.get(accountId=sender)
+        message =self.request.POST.get('transactionMessage')
+        UserAcc = UserAccount.objects.get(pk=sender)
        
-
         if amount>UserAcc.accountAmount:
             messages.warning(self.request, "Your transaction was unsuccessfull,please top up")
             return redirect('AIUTS:addTransaction')
         elif sender ==receiver:
             messages.warning(self.request, "Your transaction was unsuccessfull, please Try again")
             return redirect('AIUTS:addTransaction')
+        else:
+            UserAccount.objects.filter(pk=sender).update(accountAmount = F('accountAmount')- amount)
+            UserAccount.objects.filter(pk=receiver).update(accountAmount = F('accountAmount')+ amount)
+            form.save()
+            messages.success(self.request, "Your transaction was successfull")
+            
         return super().form_valid(form)
     
 class userAccountList(LoginRequiredMixin,generic.ListView):
@@ -86,18 +87,58 @@ class transactionList(LoginRequiredMixin,generic.ListView):
             to_date = datetime.strptime(to_date, '%Y-%m-%d') + timedelta(days=1)
             transactions =set(UserTransaction.objects.filter(transactionSender=user).filter(transactionTime__range=(from_date,to_date)).order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionSender=user).filter(transactionTime__range=(from_date, to_date)).order_by('-transactionTime')))
 
-        context = {"transactions": transactions, "Reset":True}
-
+        context = {"transactions": transactions, "Reset":True,'requestTransactions':requestTransactions}
         return HttpResponse(template.render(context, request))
     def get_queryset(self):
         user = UserAccount.objects.get(user=self.request.user)
         return set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionReceiver=user).order_by('-transactionTime')))
  
 
-class depositMoney(LoginRequiredMixin,generic.TemplateView):
+class makeRequest(LoginRequiredMixin,generic.TemplateView):
     login_url = '/accounts/login/'
-    template_name = 'AIUTS/transactionList.html'
+    template_name = 'AIUTS/request_Form.html'
 
     def post(self, request):
-        user = UserAccount.objects.get(user=request.user)
-        depositAmount = self.request.POST['depositAmount']
+        requestAmount = self.request.POST.get('depositAmount')
+        requestRecipient = self.request.POST.get('requestRecipient')
+        requestAmount=  self.request.POST.get('requestAmount')
+
+        if len(requestRecipient):
+            recipient = UserAccount.objects.get(user=self.request.user)
+            sender = UserAccount.objects.get(pk=requestRecipient)
+            UserRequest = UserTransaction(
+                transactionSender=sender, 
+                transactionReceiver=recipient, 
+                transactionAmount=requestAmount,
+                transactionStatus='Uncompleted',
+                transactionMessage="Requesting for payment",
+                transactionType="Request")
+            UserRequest.save()
+            return redirect('AIUTS:transactionList')
+
+# def approveTransaction(request, tid):
+#     if userTransaction.objects.filter(id=tid).exists():
+#        record = userTransaction.objects.get(id=tid)
+#        recipient = record.recipient
+#        recipient.balance += record.amount
+#        sender = record.sender
+#        if sender.balance < record.amount:
+#            messages.info(request, "Please make sure you have enough balance")
+#            return redirect(request.META['HTTP_REFERER'])
+#        sender.balance -= record.amount
+#        sender.save()
+#        recipient.save()
+#        record.complete = True
+#        record.remark = "Approved at {}".format(timezone.now())
+#        record.save()
+#     messages.info(request, "Transaction ID: {} is approved".format(tid))
+#     return redirect(request.META['HTTP_REFERER'])
+
+class requestList(LoginRequiredMixin,generic.ListView):
+    login_url = '/accounts/login/'
+    template_name = 'AIUTS/requestList.html'
+    context_object_name = 'requestTransactions'
+    def get_queryset(self):
+        user = UserAccount.objects.get(user=self.request.user)
+     
+        return  UserTransaction.objects.filter(transactionReceiver=user and transactionStatus="Uncomplete").order_by('-transactionTime')

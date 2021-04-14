@@ -15,7 +15,7 @@
             <h2 class="section-name">{% block heading %}{% endblock heading %}</h2>
             <nav>
                 <ul>
-                    <li><a href="">Pending Request </a></li><br>
+                    <li><a href="{% url 'AIUTS:requestList' %}">Pending Request </a></li><br>
                     <li><a href="{% url 'AIUTS:transactionList' %}" >Transaction Summary</a></li><br>
                     <li><a href="{% url 'AIUTS:addTransaction' %}"> Make a Transaction</a></li>
                 </ul>

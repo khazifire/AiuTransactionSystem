@@ -23,13 +23,14 @@
             <th>Sender</th>
             <th>Receiver</th>
             <th>Amount</th>
+            <th>Status</th>
             <th>Note</th>
             <th>Date</th>
         </tr>
     </thead>
     
     <tbody>
-        {% for transaction in transactions %}
+        {% for transaction in requestTransactions %}
         <tr>
             <td>
                 {% if transaction.transactionSender.user.username == request.user.username %} 
@@ -46,6 +47,7 @@
                 {% endif %}
             </td>
             <td>{{ transaction.transactionAmount }} baht</td>
+            <td>{{ transaction.transactionStatus}}</td>
             <td>{{ transaction.transactionMessage }}</td>
             <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
         </tr>
