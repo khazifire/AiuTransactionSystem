@@ -141,4 +141,4 @@ class requestList(LoginRequiredMixin,generic.ListView):
     def get_queryset(self):
         user = UserAccount.objects.get(user=self.request.user)
      
-        return  UserTransaction.objects.filter(transactionReceiver=user and transactionStatus="Uncomplete").order_by('-transactionTime')
+        return  set(UserTransaction.objects.filter(transactionStatus="Uncomplete").order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime'))).union(set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime')))
