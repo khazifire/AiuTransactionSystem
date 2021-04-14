@@ -33,7 +33,7 @@ class CreateAccountView(generic.CreateView):
 
 class CreateTransactionView(LoginRequiredMixin,generic.CreateView):
     login_url = '/accounts/login/'
-    template_name = 'AIUTS/transaction_form.html'    
+    template_name = 'AIUTS/deposit_form.html.html'    
     form_class = CreateTransaction
     success_url ="/"
     def form_valid(self,form):
@@ -72,28 +72,32 @@ class transactionList(LoginRequiredMixin,generic.ListView):
     template_name = 'AIUTS/transactionList.html'
     context_object_name = 'transactions'
     
+    
     def post(self, request):
         user = UserAccount.objects.get(user=request.user)
         from_date = self.request.POST['from_date']
         to_date = self.request.POST['to_date']
-        from_date = datetime.strptime(from_date, '%Y-%m-%d')
-        to_date = datetime.strptime(to_date, '%Y-%m-%d') + timedelta(days=1)
         template = loader.get_template(self.template_name)
 
-        transactions =set(UserTransaction.objects.filter(transactionSender=user).filter(transactionTime__range=(from_date,to_date))).union(set(UserTransaction.objects.filter(transactionSender=user).filter(record_date__range=(from_date, to_date)))).order_by('-transactionTime')
+        transactions = set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionReceiver=user).order_by('-transactionTime')))
 
-        context = {"transactions": transactions}
+        if len(from_date) and len(to_date):
+            from_date = datetime.strptime(from_date, '%Y-%m-%d')
+            to_date = datetime.strptime(to_date, '%Y-%m-%d') + timedelta(days=1)
+            transactions =set(UserTransaction.objects.filter(transactionSender=user).filter(transactionTime__range=(from_date,to_date)).order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionSender=user).filter(transactionTime__range=(from_date, to_date)).order_by('-transactionTime')))
+
+        context = {"transactions": transactions, "Reset":True}
+
         return HttpResponse(template.render(context, request))
     def get_queryset(self):
         user = UserAccount.objects.get(user=self.request.user)
         return set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionReceiver=user).order_by('-transactionTime')))
-        # return UserTransaction.objects.filter(transactionSender=user, transactionReceiver=user,transactionTime__lte=timezone.now()).order_by('-transactionTime')
-
-# class filteredTransactions(LoginRequiredMixin,generic.ListView):
-#     login_url = '/accounts/login/'
-#     template_name = 'AIUTS/transactionList.html'
-#     context_object_name = 'transactions'
  
-#     def get_queryset(self):
-#         user = UserAccount.objects.get(user=self.request.user)
-#         return User.objects.filter(transactionSender=self.user,transactionTime__lte=timezone.now()).order_by('-transactionTime')
+
+class depositMoney(LoginRequiredMixin,generic.TemplateView):
+    login_url = '/accounts/login/'
+    template_name = 'AIUTS/transactionList.html'
+
+    def post(self, request):
+        user = UserAccount.objects.get(user=request.user)
+        depositAmount = self.request.POST['depositAmount']

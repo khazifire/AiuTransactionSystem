@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/styles.css' %}">
-    <title>AIUTS</title>
+    <title> AIUTS </title>
 </head>
 <body>
     <p class="logout">{{user}} &nbsp;|&nbsp; <a class="logoutbtn" href="{% url 'logout'%}">Logout</a></p>
     <header>
-            <h1 class="logo"><a class="logo-name"href="{% url 'AIUTS:index' %}" >AIUTS</a></h1>
+            <h1 class="logo"><a class="logo-name"href="{% url 'AIUTS:index' %}" >{% block title %}AIUTS{% endblock title %}</a></h1>
             <h2 class="section-name">{% block heading %}{% endblock heading %}</h2>
             <nav>
                 <ul>
-                    <li><a href="">Account Balance </a></li><br>
+                    <li><a href="">Pending Request </a></li><br>
                     <li><a href="{% url 'AIUTS:transactionList' %}" >Transaction Summary</a></li><br>
                     <li><a href="{% url 'AIUTS:addTransaction' %}"> Make a Transaction</a></li>
                 </ul>

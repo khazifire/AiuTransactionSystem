@@ -15,19 +15,21 @@
 {% endblock heading %}
 
 {% block content %} 
-
     <p>Logged in user:  {{ user }}</p>
     {% if users %}
    
         <hr />
     
             {% for user in users %}
-            
-          
                 <li><a href="#">{{ user.accountId }}  balance: {{user.accountAmount}}</a></li>
             {% endfor %}
         </ul>
         {% else %}
         <p> No Account are available. </p>
     {% endif %}
+
+    <button class="btnMain">Deposit Money</button>
+    <button class="btnMain"><a href="{% url 'AIUTS:addTransaction' %}" >Make Transaction</a></button>
+    <button class="btnMain">Payment Request</button>
+    
 {% endblock content %}

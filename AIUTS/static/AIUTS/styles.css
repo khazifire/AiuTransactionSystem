@@ -60,13 +60,14 @@ nav ul li{
   padding:2em;
   background-color:rgb(201, 199, 199); 
   overflow-y: scroll;
+ 
 }
 
 a{
   text-decoration: none;
   color: black;
 }
-a:hover{
+a:hover, .btnMain:hover{
   background-color: rgb(80, 80, 80); 
   color: rgb(226, 226, 226);
   cursor: pointer;
@@ -79,9 +80,6 @@ label{
 }
 .form{
   margin: 5% 40% 5% 33%;
-}
-input{
-  float: right;
 }
 
 /* table */
@@ -125,4 +123,48 @@ footer{
 
 .createAcc{
   text-decoration: underline;
+}
+
+
+fieldset{
+  margin-left: 10%;
+  width: 80%;
+  padding-bottom: 1%;
+}
+
+
+.styled-table {
+  margin-left: 10%;
+  border-collapse: collapse;
+  /* margin: 25px 0; */
+  font-size: 0.9em;
+  font-family: sans-serif;
+  width: 80%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.styled-table thead tr {
+  background-color: #495464; ;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.from_date_label{
+  padding-right: 1%;
+  font-size: 0.9em;
+}
+
+.btnMain{
+  padding: 12px 28px;
+  border-radius: 8px;
 }
