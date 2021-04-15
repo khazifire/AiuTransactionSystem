@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from .models import UserAccount, UserTransaction
 from .forms import CreateAccount, CreateTransaction
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import F
+from django.db.models import F,Q
 from django.contrib.auth.models import User
 from django.template import loader
 import hashlib
@@ -116,23 +116,6 @@ class makeRequest(LoginRequiredMixin,generic.TemplateView):
             UserRequest.save()
             return redirect('AIUTS:transactionList')
 
-# def approveTransaction(request, tid):
-#     if userTransaction.objects.filter(id=tid).exists():
-#        record = userTransaction.objects.get(id=tid)
-#        recipient = record.recipient
-#        recipient.balance += record.amount
-#        sender = record.sender
-#        if sender.balance < record.amount:
-#            messages.info(request, "Please make sure you have enough balance")
-#            return redirect(request.META['HTTP_REFERER'])
-#        sender.balance -= record.amount
-#        sender.save()
-#        recipient.save()
-#        record.complete = True
-#        record.remark = "Approved at {}".format(timezone.now())
-#        record.save()
-#     messages.info(request, "Transaction ID: {} is approved".format(tid))
-#     return redirect(request.META['HTTP_REFERER'])
 
 class requestList(LoginRequiredMixin,generic.ListView):
     login_url = '/accounts/login/'
@@ -140,5 +123,21 @@ class requestList(LoginRequiredMixin,generic.ListView):
     context_object_name = 'requestTransactions'
     def get_queryset(self):
         user = UserAccount.objects.get(user=self.request.user)
-     
-        return  set(UserTransaction.objects.filter(transactionStatus="Uncomplete").order_by('-transactionTime')).union(set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime'))).union(set(UserTransaction.objects.filter(transactionSender=user).order_by('-transactionTime')))
+        return  UserTransaction.objects.filter(Q(transactionSender=user) & Q(transactionStatus="Uncompleted")).order_by('-transactionTime')
+
+
+
+
+
+
+# for acceting request
+#         if userTransaction.objects.filter(transactionId=request.requestId).exists():
+#             request = userTransaction.objects.get(transactionId=request.requestId)
+#             transactionSender = request.transactionSender
+#             transactionReceiver = request.transactionReceiver
+#             transactionAmount = request.transactionAmount
+
+
+#             UserAccount.objects.filter(pk=transactionSender).update(accountAmount = F('accountAmount')- transactionAmount)
+#             UserAccount.objects.filter(pk=transactionReceiver).update(accountAmount = F('accountAmount')+ transactionAmount)
+

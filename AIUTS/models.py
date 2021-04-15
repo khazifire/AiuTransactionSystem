@@ -6,10 +6,6 @@ class UserAccount(models.Model):
     accountId = models.CharField(primary_key=True,max_length=255,)
     accountAmount = models.IntegerField(default=100)
 
-
-   
-  
-
 class UserTransaction(models.Model):
     transactionId = models.AutoField(primary_key=True)
     transactionTime = models.DateTimeField(auto_now_add=True)

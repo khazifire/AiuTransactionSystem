@@ -3,58 +3,47 @@
 {% block heading %}Pending Request{% endblock heading %}
 {% block content %} 
 
-<fieldset>
-    <legend>Filter Transaction History:</legend>
-    <form  method="POST">
-        {% csrf_token %}
-        <label class="from_date_label" for="from_date">From:</label>
-        <input class="from_date" type="date"  name="from_date">
 
-        <label class="from_date_label" for="to_date">To:</label>
-        <input type="date"  name="to_date">
- 
-        <button type="submit">{% if Reset %} RESET {% else %} Filter{% endif %}</button>
-    </form>
-  </fieldset>
 
 <table class="styled-table">
     <thead>
         <tr>
-            <th>Sender</th>
-            <th>Receiver</th>
+            <th>From</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Note</th>
             <th>Date</th>
+            <th></th>
+            <th></th>
+          
         </tr>
     </thead>
     
     <tbody>
         {% for transaction in requestTransactions %}
         <tr>
-            <td>
-                {% if transaction.transactionSender.user.username == request.user.username %} 
-                {{transaction.transactionSender.user.username}} (You)   
-                {% else %}
-                {{ transaction.transactionSender.user.username }}
-                {% endif %}
-            </td>
-            <td>
-                {% if transaction.transactionReceiver.user.username == request.user.username %} 
-                You   
-                {% else %}
-                {{ transaction.transactionReceiver.user.username }}
-                {% endif %}
-            </td>
+            <td>{{ transaction.transactionReceiver.user.username |capfirst}}</td>
             <td>{{ transaction.transactionAmount }} baht</td>
             <td>{{ transaction.transactionStatus}}</td>
             <td>{{ transaction.transactionMessage }}</td>
             <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
+            {% if transaction.transactionSender.user.username == request.user.username %} 
+            <td> <button> <a > Approve </a></button></td>
+            <td> <button> <a > Decline </a></button></td>
+            {% endif %}
+
         </tr>
-        {% empty %}
-        <p>No transactions</p>
-    {% endfor %}
+        
+
+
     </tbody>
+   
+        <td>
+            {% empty %}
+            <p>You don't have any pending request</p>
+        {% endfor %}
+        </td>
+
     
 </table>
 
