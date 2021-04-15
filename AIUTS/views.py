@@ -30,6 +30,7 @@ class CreateAccountView(generic.CreateView):
 
 class CreateTransactionView(LoginRequiredMixin,generic.CreateView):
     login_url = '/accounts/login/'
+    model = UserTransaction
     template_name = 'AIUTS/transaction_form.html'    
     form_class = CreateTransaction
     success_url ="/"
@@ -40,6 +41,7 @@ class CreateTransactionView(LoginRequiredMixin,generic.CreateView):
         receiver = self.request.POST.get('transactionReceiver')
         sender =self.request.POST.get('transactionSender')
         message =self.request.POST.get('transactionMessage')
+        transactionStatus = 'Pending'
         UserAcc = UserAccount.objects.get(pk=sender)
        
         if amount>UserAcc.accountAmount:
@@ -48,11 +50,16 @@ class CreateTransactionView(LoginRequiredMixin,generic.CreateView):
         elif sender ==receiver:
             messages.warning(self.request, "Your transaction was unsuccessfull, please Try again")
             return redirect('AIUTS:addTransaction')
-        else:
-            UserAccount.objects.filter(pk=sender).update(accountAmount = F('accountAmount')- amount)
-            UserAccount.objects.filter(pk=receiver).update(accountAmount = F('accountAmount')+ amount)
-            form.save()
-            messages.success(self.request, "Your transaction was successfull")
+        
+        # elif transactionStatus == 'Pending':
+        #     print("Pending")
+        #     form.save()
+        # else:
+        #     print("Approve")
+        #     UserAccount.objects.filter(pk=sender).update(accountAmount = F('accountAmount')- amount)
+        #     UserAccount.objects.filter(pk=receiver).update(accountAmount = F('accountAmount')+ amount)
+        #     form.save()
+        #     messages.success(self.request, "Your transaction was successfull")
             
         return super().form_valid(form)
     
@@ -124,6 +131,22 @@ class requestList(LoginRequiredMixin,generic.ListView):
     def get_queryset(self):
         user = UserAccount.objects.get(user=self.request.user)
         return  UserTransaction.objects.filter(Q(transactionSender=user) & Q(transactionStatus="Uncompleted")).order_by('-transactionTime')
+
+
+class pendingList(LoginRequiredMixin,generic.ListView):
+    login_url = '/accounts/login/'
+    template_name = 'AIUTS/transactionStatus.html'
+    context_object_name = 'Ptransactions'
+    def get_queryset(self):
+        user = UserAccount.objects.get(user=self.request.user)
+        return  UserTransaction.objects.filter(Q(transactionReceiver=user) & Q(transactionStatus="Pending")).order_by('-transactionTime')
+
+class Approve(LoginRequiredMixin,generic.UpdateView):
+    login_url = '/accounts/login/'
+    model = UserTransaction
+    fields = ['transactionStatus']
+    template_name = 'AIUTS/edit.html'
+    success_url = '/pendingList/'
 
 
 

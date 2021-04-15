@@ -1,0 +1,47 @@
+{% extends "AIUTS/template.html" %}
+{% block title %}Back{% endblock title %}
+{% block heading %}Pending Request{% endblock heading %}
+{% block content %} 
+
+
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Amount</th>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+          
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for transaction in Ptransactions %}
+        <tr>
+            <td>{{ transaction.transactionReceiver.user.username |capfirst}}</td>
+            <td>{{ transaction.transactionAmount }} baht</td>
+            <td>{{ transaction.transactionMessage }}</td>
+            <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
+            <td>{{ transaction.transactionStatus }}</td>
+            <td><a href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a></td>
+
+        </tr>
+        
+
+
+    </tbody>
+   
+        <td>
+            {% empty %}
+            <p>You don't have any pending request</p>
+        {% endfor %}
+        </td>
+
+    
+</table>
+
+
+{% endblock content %}
