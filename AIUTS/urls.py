@@ -12,4 +12,5 @@ urlpatterns = [
     path('addAccount/', views.CreateAccountView.as_view(), name='addAccount'),
     path('addTransaction/', views.CreateTransactionView.as_view(), name='addTransaction'),
     path('paymentRequest/', views.makeRequest.as_view(), name='paymentRequest'),
+    path('deposit/', views.makeDeposit.as_view(), name="deposit"),
 ]

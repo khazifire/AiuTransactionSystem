@@ -26,7 +26,12 @@
             <td>{{ transaction.transactionMessage }}</td>
             <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
             <td>{{ transaction.transactionStatus }}</td>
-            <td><a href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a></td>
+
+            {% if transaction.transactionSender.user.username == request.user.username %}
+            <td>
+                <a href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a>
+            </td>
+            {% endif %}
 
         </tr>
         

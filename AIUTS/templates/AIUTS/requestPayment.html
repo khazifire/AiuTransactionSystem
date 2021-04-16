@@ -1,14 +1,18 @@
 
 {% extends "AIUTS/template.html" %}
+{% block title %} Back {% endblock title %}
+{% block heading %}Requesting Payment{% endblock heading %}
 {% block content %} 
 
 
     <form action="{% url 'AIUTS:paymentRequest' %}" method="POST">
         {% csrf_token %}
-        <label for="Deposit Amount">Request Payment From:</label>
+        <label >Request Payment From:</label>
         <input type="text" name="requestRecipient">
-        <label for="Deposit Amount">Request Amount:</label>
+        <label >Request Amount:</label>
         <input type="number" name="requestAmount">
+        <label >Request Message:</label>
+        <input type="text" name="transactionMessage">
         <input type="submit">
     </form>
 

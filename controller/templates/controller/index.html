@@ -1,0 +1,44 @@
+{% extends "controller/bases.html" %}
+{% block content %}
+<p></p>
+
+<h1 class="text-center">All Deposit Request</h1>
+<p></p>
+
+
+
+
+
+
+<div class="container">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Time</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for request in requests%}
+      <tr>
+        <th scope="row">{{request.DepositRequestID}}</th>
+        <td>{{ request.RequestReceiver }}</td>
+        <td>{{ request.RequestTime }}</td>
+        <td>{{ request.RequestAmount }}</td>
+        <td>{{ request.RequestStatus }}</td>
+        <td><a href="{% url 'controller:Approve' request.DepositRequestID%}" >Approve</a></td>
+      </tr>
+      {% empty %}
+      <p>Nothing Yet</p>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+</div>
+
+
+{% endblock %}

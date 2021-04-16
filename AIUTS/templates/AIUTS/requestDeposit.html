@@ -1,0 +1,14 @@
+{% extends "AIUTS/template.html" %}
+{% block title %} Back {% endblock title %}
+{% block heading %}Making Deposit{% endblock heading %}
+{% block content %} 
+
+
+<form action="{% url 'AIUTS:deposit' %}" method="POST">
+    {% csrf_token %}
+    <label>Deposit Amount</label>
+    <input type="number" name="RequestAmount" min="1">
+    <input type="submit"> 
+</form>
+
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import UserTransaction, UserAccount
+from .models import UserTransaction, UserAccount, DepositRequest
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
@@ -16,3 +16,8 @@ class CreateTransaction(forms.ModelForm):
     class Meta:
         model = UserTransaction
         fields =['transactionSender','transactionReceiver','transactionAmount','transactionMessage'] 
+
+class DepositRequestForm(forms.ModelForm):
+    class Meta:
+        model = DepositRequest
+        fields =['RequestAmount']

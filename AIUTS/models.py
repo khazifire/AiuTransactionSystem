@@ -10,10 +10,7 @@ class UserAccount(models.Model):
         return f"{self.user}"
 
 class UserTransaction(models.Model):
-    STATUS = (
-			('Pending', 'Pending'),
-			('Approve', 'Approve')
-		)
+    STATUS = (('Pending', 'Pending'),('Approve', 'Approve'))
     transactionId = models.AutoField(primary_key=True)
     transactionTime = models.DateTimeField(auto_now_add=True)
     transactionSender = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name="Sender")

@@ -15,21 +15,22 @@
 {% endblock heading %}
 
 {% block content %} 
-    <p>Logged in user:  {{ user }}</p>
+    <p>username:  {{ user }}</p>
     {% if users %}
-   
-        <hr />
-    
             {% for user in users %}
-                <li><a href="#">{{ user.accountId }}  balance: {{user.accountAmount}}</a></li>
+                <p>Account ID: {{ user.accountId }} </p>
             {% endfor %}
-        </ul>
+
         {% else %}
         <p> No Account are available. </p>
     {% endif %}
+    <hr /> </br>
+    <div class="navbuttons">
+        <button class="btnMain"><a href="{% url 'AIUTS:deposit' %}" >Deposit Money</a></button>
+        <button class="btnMain"><a href="{% url 'AIUTS:addTransaction' %}" >Make Transaction</a></button>
+        <button class="btnMain"><a href="{% url 'AIUTS:paymentRequest' %}" >Payment Request</a></button>
 
-    <button class="btnMain">Deposit Money</button>
-    <button class="btnMain"><a href="{% url 'AIUTS:addTransaction' %}" >Make Transaction</a></button>
-    <button class="btnMain"><a href="{% url 'AIUTS:pendingList' %}" >Pending Request</a></button>
+    </div>
+    
     
 {% endblock content %}

@@ -1,0 +1,10 @@
+<form method="post" >
+    
+    {% csrf_token %}
+    <h1>{{ form.as_p }}</h1>
+
+    <div>
+        <button  type="submit">Save</button><br>
+    </div>  
+    
+</form>
