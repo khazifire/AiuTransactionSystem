@@ -8,6 +8,7 @@
 <table class="styled-table">
     <thead>
         <tr>
+            <th>#</th>
             <th>From</th>
             <th>Amount</th>
             <th>Note</th>
@@ -21,7 +22,15 @@
     <tbody>
         {% for transaction in Ptransactions %}
         <tr>
-            <td>{{ transaction.transactionReceiver.user.username |capfirst}}</td>
+           
+            <td>{{ forloop.counter }}</td>
+            <td>
+                {% if transaction.transactionReceiver.user.username == request.user.username %} 
+                {{ transaction.transactionReceiver.user.username |capfirst}} (You)   
+                {% else %}
+                {{ transaction.transactionReceiver.user.username |capfirst}}
+                {% endif %}
+            </td>
             <td>{{ transaction.transactionAmount }} baht</td>
             <td>{{ transaction.transactionMessage }}</td>
             <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
@@ -29,7 +38,7 @@
 
             {% if transaction.transactionSender.user.username == request.user.username %}
             <td>
-                <a href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a>
+               <button> <a  href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a></button> 
             </td>
             {% endif %}
 

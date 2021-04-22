@@ -8,7 +8,7 @@
     <form action="{% url 'AIUTS:paymentRequest' %}" method="POST">
         {% csrf_token %}
         <label >Request Payment From:</label>
-        <input type="text" name="requestRecipient">
+        <input type="text" name="requestRecipient" size="40>
         <label >Request Amount:</label>
         <input type="number" name="requestAmount">
         <label >Request Message:</label>

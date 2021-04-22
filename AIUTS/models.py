@@ -1,13 +1,31 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class UserAccount(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     accountId = models.CharField(primary_key=True,max_length=255,)
     accountAmount = models.IntegerField(default=100)
 
     def __str__(self):
         return f"{self.user}"
+
+    '''
+    everytime the user is create, it will add to a users group directly
+    '''
+    @receiver(post_save, sender=User)
+    def create_account(sender, instance, created, **kwargs):
+        if created:
+            print(User.username)
+            # UserAccount.objects.create(user=instance)
+            print('User create')
+            instance.groups.add(Group.objects.get(name='users'))
+            print('User add to group')
+            
+
+    # post_save.connect(create_account, sender=User)
+
 
 class UserTransaction(models.Model):
     STATUS = (('Pending', 'Pending'),('Approve', 'Approve'))

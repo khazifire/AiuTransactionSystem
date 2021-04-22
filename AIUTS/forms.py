@@ -15,7 +15,7 @@ class CreateAccount(UserCreationForm):
 class CreateTransaction(forms.ModelForm):
     class Meta:
         model = UserTransaction
-        fields =['transactionSender','transactionReceiver','transactionAmount','transactionMessage'] 
+        fields =['transactionReceiver','transactionAmount','transactionMessage'] 
 
 class DepositRequestForm(forms.ModelForm):
     class Meta:

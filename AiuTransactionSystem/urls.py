@@ -22,3 +22,5 @@ urlpatterns = [
     path('', include('AIUTS.urls')),
     path('controller/', include('controller.urls'))
 ]
+
+

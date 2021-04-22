@@ -1,5 +1,8 @@
 {% extends "controller/bases.html" %}
 {% block content %}
+
+
+
 <p></p>
 
 <h1 class="text-center">All Deposit Request</h1>
@@ -11,6 +14,7 @@
 
 
 <div class="container">
+  <p class="logout"><a class="logoutbtn" href="{% url 'logout'%}">Logout</a></p>
 <table class="table">
     <thead>
       <tr>
@@ -33,7 +37,7 @@
         <td><a href="{% url 'controller:Approve' request.DepositRequestID%}" >Approve</a></td>
       </tr>
       {% empty %}
-      <p>Nothing Yet</p>
+      <p>No Deposit Request in a Moment</p>
       {% endfor %}
     </tbody>
   </table>

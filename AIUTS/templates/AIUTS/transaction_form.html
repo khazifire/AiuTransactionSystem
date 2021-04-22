@@ -9,24 +9,26 @@
  <p>{{ message }}</p> 
 </div>
 {% endfor %}
-<div class="form">
+
     <form method="POST" action="{% url 'AIUTS:addTransaction' %}" >
     {% csrf_token %}
-    {{ form.as_p}} 
-    <!-- <label for="transactionSender">From:</label>
-    <input  type="text" name="transactionSender" ><br>
+    <!-- {{ form.as_p}}  -->
+     <!-- <label for="transactionSender">From:</label>
+    <input  type="text" name="transactionSender" ><br> -->
 
-    <label for="transactionReceiver">To: </label>
-    <input  type="text" name="transactionReceiver" ><br>
-
-    <label for="transactionMessage">Message: </label>
-    <input type="text" name="transactionMessage" placeholder="short note"><br>
+    <label for="transactionReceiver">Send To: </label>
+    <input  type="text" name="transactionReceiver" size="40>
 
     <label for="transactionAmount">Amount: </label>
-    <input type="number" name="transactionAmount" placeholder="0"><br>-->
+    <input type="number" name="transactionAmount" placeholder="0">
+
+    <label for="transactionMessage">Message: </label>
+    <input type="text" name="transactionMessage" placeholder="short note">
+
+   
 
     <input type="submit" value="Make Transaction"> 
-    </form>
+   
 </div>
 {% endblock content %}
 
