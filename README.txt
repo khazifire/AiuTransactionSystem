@@ -1,12 +1,12 @@
-# AIU Transaction System
+#AIU Transaction System
 
 A simple system which enables users to make transaction, depositi money, as well as request money from other people.
 
-## Note
+##Note
 
 Everytime new user is created, they will have a "users" permission they cannot access the controller page (the page that allow them to approve the deposit request) if they try to access, they will get 403 error 
 
-### Demo Amin Account
+###Demo Amin Account
 
 You can use the following account, to access the admin page, as well as access the controller page that allow to approve the deposit 
 
@@ -15,7 +15,7 @@ username: admin
 password: admin@Admin,123
 ```
 
-### Demo User Accounts
+###Demo User Accounts
 
 You can use the following accounts to create transaction, make deposit request, make payment requests, as well as see pending request list.
 
