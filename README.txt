@@ -15,7 +15,7 @@ username: admin
 password: admin@Admin,123
 ```
 
-### Demo User Accounts
+## Demo User Accounts
 
 You can use the following accounts to create transaction, make deposit request, make payment requests, as well as see pending request list.
 
