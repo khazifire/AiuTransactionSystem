@@ -1,21 +1,13 @@
-{% extends "controller/bases.html" %}
-{% block content %}
-
-
+{% extends "controller/bases.html" %} {% block content %}
 
 <p></p>
 
 <h1 class="text-center">All Deposit Request</h1>
 <p></p>
 
-
-
-
-
-
 <div class="container">
   <p class="logout"><a class="logoutbtn" href="{% url 'logout'%}">Logout</a></p>
-<table class="table" id="depositRequest">
+  <table class="table" id="depositRequest">
     <thead>
       <tr>
         <th scope="col">ID</th>
@@ -27,53 +19,52 @@
       </tr>
     </thead>
     <tbody>
-        {% for request in requests%}
+      {% for request in requests%}
       <tr>
         <th scope="row">{{request.DepositRequestID}}</th>
         <td>{{ request.RequestReceiver }}</td>
         <td>{{ request.RequestTime }}</td>
         <td>{{ request.RequestAmount }}</td>
         <td>{{ request.RequestStatus }}</td>
-        <td><a href="{% url 'controller:Approve' request.DepositRequestID%}" >Approve</a></td>
+        <td>
+          <a href="{% url 'controller:Approve' request.DepositRequestID%}"
+            >Approve</a
+          >
+        </td>
       </tr>
       {% empty %}
-      <p>No Deposit Request in a Moment</p>
+      <p id="empty">No Deposit Request in a Moment</p>
       {% endfor %}
     </tbody>
   </table>
-  <br>
+  <br />
 </div>
 
-
-{% endblock %}
-
-
-{% block js %}
+{% endblock %} {% block js %}
 <script>
-
-
- function fetchdata(){
- $.ajax({
-  url: "{% url 'controller:index' %}",
-  type: 'GET',
-  success: function(data){
-   // Perform operation on the return value
-
-      {#balance = data.slice(data.indexOf("Balance:") + 34, data.indexOf("/span") - 1);#}
-      {#console.log(balance);#}
-
-      requesttable = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
-      console.log(requesttable)
-
-      $("#depositRequest").replaceWith(requesttable);
+  function fetchdata() {
+    $.ajax({
+      url: "{% url 'controller:index' %}",
+      type: "GET",
+      success: function (data) {
+        balance = data.slice(
+          data.indexOf("Balance:") + 34,
+          data.indexOf("/span") - 1
+        );
+        console.log(balance);
+        requesttable = data.slice(
+          data.indexOf("table") - 1,
+          data.indexOf("/table") + 10
+        );
+        $("#depositRequest").replaceWith(requesttable);
+        $("#empty").remove();
+      },
+    });
   }
- });
-}
 
-$(document).ready(function(){
- setInterval(fetchdata,5000);
-});
-
+  $(document).ready(function () {
+    setInterval(fetchdata, 5000);
+  });
 </script>
 
 {% endblock js %}

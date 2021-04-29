@@ -56,7 +56,7 @@
            
         </tr>
         {% empty %}
-        <p>No transactions</p>
+        <p id="empty">No transactions</p>
     {% endfor %}
     </tbody>
     
@@ -76,6 +76,7 @@
       transactions = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
       console.log(transactions)
       $("#transactions").replaceWith(transactions);
+      $("#empty").remove();
   }
  });
 }

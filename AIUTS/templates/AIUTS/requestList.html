@@ -35,7 +35,7 @@
    
         <td>
             {% empty %}
-            <p>You don't have any pending request</p>
+            <p id="empty">You don't have any pending request</p>
         {% endfor %}
         </td>
 </table>
@@ -53,6 +53,7 @@
       requestList = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
       console.log(requestList)
       $("#pendingRequest").replaceWith(requestList);
+      $("#empty").remove();
   }
  });
 }
