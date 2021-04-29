@@ -3,9 +3,7 @@
 {% block heading %}Pending Request{% endblock heading %}
 {% block content %} 
 
-
-
-<table class="styled-table" id="pendingRequest">
+<table class="styled-table" id="requestlist">
     <thead>
         <tr>
             <th>From</th>
@@ -47,12 +45,12 @@
 
  function fetchdata(){
  $.ajax({
-  url: "{% url 'AIUTS:pendingList' %}",
+  url: "{% url 'AIUTS:requestList' %}",
   type: 'GET',
   success: function(data){
       requestList = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
       console.log(requestList)
-      $("#pendingRequest").replaceWith(requestList);
+      $("#requestlist").replaceWith(requestList);
       $("#empty").remove();
   }
  });

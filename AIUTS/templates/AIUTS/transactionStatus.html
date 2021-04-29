@@ -1,61 +1,74 @@
-{% extends "AIUTS/template.html" %}
-{% block title %}Back{% endblock title %}
-{% block heading %}Pending Request{% endblock heading %}
-{% block content %} 
+{% extends "AIUTS/template.html" %} {% block title %}Back{% endblock title %} 
+{% block heading %}Pending Request{% endblock heading %} 
+{% block content %}
 
+<table class="styled-table" id="transactionStatus">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>From</th>
+      <th>Amount</th>
+      <th>Note</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+  </thead>
 
+  <tbody>
+    {% for transaction in Ptransactions %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        {% if transaction.transactionReceiver.user.username == request.user.username %} 
+        {{transaction.transactionReceiver.user.username |capfirst}}(You) 
+        {% else %} 
+        {{ transaction.transactionReceiver.user.username |capfirst}} {% endif %}
+      </td>
+      <td>{{ transaction.transactionAmount }} baht</td>
+      <td>{{ transaction.transactionMessage }}</td>
+      <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
+      <td>{{ transaction.transactionStatus }}</td>
 
-<table class="styled-table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>From</th>
-            <th>Amount</th>
-            <th>Note</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th></th>
-          
-        </tr>
-    </thead>
-    
-    <tbody>
-        {% for transaction in Ptransactions %}
-        <tr>
-           
-            <td>{{ forloop.counter }}</td>
-            <td>
-                {% if transaction.transactionReceiver.user.username == request.user.username %} 
-                {{ transaction.transactionReceiver.user.username |capfirst}} (You)   
-                {% else %}
-                {{ transaction.transactionReceiver.user.username |capfirst}}
-                {% endif %}
-            </td>
-            <td>{{ transaction.transactionAmount }} baht</td>
-            <td>{{ transaction.transactionMessage }}</td>
-            <td>{{ transaction.transactionTime|date:"M d, Y" }}</td>
-            <td>{{ transaction.transactionStatus }}</td>
+      {% if transaction.transactionSender.user.username == request.user.username%}
+      <td>
+        <button>
+          <a href="{% url 'AIUTS:Approve' transaction.transactionId%}"
+            >Approve</a
+          >
+        </button>
+      </td>
+      {% endif %}
+    </tr>
+  </tbody>
 
-            {% if transaction.transactionSender.user.username == request.user.username %}
-            <td>
-               <button> <a  href="{% url 'AIUTS:Approve' transaction.transactionId%}" >Approve</a></button> 
-            </td>
-            {% endif %}
-
-        </tr>
-        
-
-
-    </tbody>
-   
-        <td>
-            {% empty %}
-            <p >You don't have any pending request</p>
-        {% endfor %}
-        </td>
-
-    
+  <td>
+    {% empty %}
+    <p id="empty">You don't have any pending request</p>
+    {% endfor %}
+  </td>
 </table>
 
+{% endblock content %} {% block js %}
+<script>
+  function fetchdata() {
+    $.ajax({
+      url: "{% url 'AIUTS:pendingList' %}",
+      type: "GET",
+      success: function (data) {
+        requestL = data.slice(
+          data.indexOf("table") - 1,
+          data.indexOf("/table") + 10
+        );
+        $("#transactionStatus").replaceWith(requestL);
+        $("#empty").remove();
+      },
+    });
+  }
 
-{% endblock content %}
+  $(document).ready(function () {
+    setInterval(fetchdata, 5000);
+  });
+</script>
+
+{% endblock js %}
