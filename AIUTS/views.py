@@ -66,6 +66,7 @@ class userAccountList(LoginRequiredMixin,generic.ListView):
     login_url = '/accounts/login/'
     template_name = 'AIUTS/index.html'
     context_object_name = 'users'
+  
     def get_queryset(self):
         return UserAccount.objects.filter(user=self.request.user)
 
@@ -133,6 +134,8 @@ class makeDeposit(LoginRequiredMixin,generic.CreateView):
         emp = User.objects.filter(groups__name='AIUTS_EMP')
         context["AIUTS_EMP"] = UserAccount.objects.filter(user__in=emp) 
         return context
+    
+    
 
     def form_valid(self,form):
         self.instance =form.save(commit=False)

@@ -15,7 +15,7 @@
 
 <div class="container">
   <p class="logout"><a class="logoutbtn" href="{% url 'logout'%}">Logout</a></p>
-<table class="table">
+<table class="table" id="depositRequest">
     <thead>
       <tr>
         <th scope="col">ID</th>
@@ -46,3 +46,34 @@
 
 
 {% endblock %}
+
+
+{% block js %}
+<script>
+
+
+ function fetchdata(){
+ $.ajax({
+  url: "{% url 'controller:index' %}",
+  type: 'GET',
+  success: function(data){
+   // Perform operation on the return value
+
+      {#balance = data.slice(data.indexOf("Balance:") + 34, data.indexOf("/span") - 1);#}
+      {#console.log(balance);#}
+
+      requesttable = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
+      console.log(requesttable)
+
+      $("#depositRequest").replaceWith(requesttable);
+  }
+ });
+}
+
+$(document).ready(function(){
+ setInterval(fetchdata,5000);
+});
+
+</script>
+
+{% endblock js %}

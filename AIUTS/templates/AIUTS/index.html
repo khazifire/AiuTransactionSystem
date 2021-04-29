@@ -7,13 +7,13 @@
 
 {% if users %}
     {% for user in users %}
-        <p>Balance: {{user.accountAmount}} Baht</p>
+        <p>Balance: <span id="accountAmount">{{user.accountAmount}}</span> Baht</p>
     {% endfor %}
     {% else %}
     <p> No Account are available. </p>
     {% endif %}
 {% endblock heading %}
-
+q
 {% block content %} 
     <p>username:  {{ user }}</p>
     {% if users %}
@@ -34,3 +34,29 @@
     
     
 {% endblock content %}
+
+{% block js %}
+<script>
+
+
+ function fetchdata(){
+ $.ajax({
+  url: "{% url 'AIUTS:index' %}",
+  type: 'GET',
+  success: function(data){
+   // Perform operation on the return value
+
+      balance = data.slice(data.indexOf("Balance:") + 34, data.indexOf("/span") - 1);
+      console.log(balance);
+      $("#accountAmount").replaceWith("<span id='accountAmount'>"+balance+"</span>")
+  }
+ });
+}
+
+$(document).ready(function(){
+ setInterval(fetchdata,5000);
+});
+
+</script>
+
+{% endblock js %}

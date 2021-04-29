@@ -5,7 +5,7 @@
 
 
 
-<table class="styled-table">
+<table class="styled-table" id="pendingRequest">
     <thead>
         <tr>
             <th>From</th>
@@ -15,7 +15,6 @@
             <th>Date</th>
             <th></th>
             <th></th>
-          
         </tr>
     </thead>
     
@@ -31,11 +30,7 @@
             <td> <button> <a > Approve </a></button></td>
             <td> <button> <a > Decline </a></button></td>
             {% endif %}
-
         </tr>
-        
-
-
     </tbody>
    
         <td>
@@ -43,9 +38,29 @@
             <p>You don't have any pending request</p>
         {% endfor %}
         </td>
-
-    
 </table>
 
-
 {% endblock content %}
+
+{% block js %}
+<script>
+
+ function fetchdata(){
+ $.ajax({
+  url: "{% url 'AIUTS:pendingList' %}",
+  type: 'GET',
+  success: function(data){
+      requestList = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
+      console.log(requestList)
+      $("#pendingRequest").replaceWith(requestList);
+  }
+ });
+}
+
+$(document).ready(function(){
+ setInterval(fetchdata,5000);
+});
+
+</script>
+
+{% endblock js %}

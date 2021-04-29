@@ -17,7 +17,7 @@
     </form>
   </fieldset>
 
-<table class="styled-table">
+<table class="styled-table" id="transactions">
     <thead>
         <tr>
             <th>#</th>
@@ -64,3 +64,26 @@
 
 
 {% endblock content %}
+
+{% block js %}
+<script>
+
+ function fetchdata(){
+ $.ajax({
+  url: "{% url 'AIUTS:transactionList' %}",
+  type: 'GET',
+  success: function(data){
+      transactions = data.slice(data.indexOf("table") - 1, data.indexOf("/table") + 10);
+      console.log(transactions)
+      $("#transactions").replaceWith(transactions);
+  }
+ });
+}
+
+$(document).ready(function(){
+ setInterval(fetchdata,5000);
+});
+
+</script>
+
+{% endblock js %}
